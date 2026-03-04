@@ -1,4 +1,4 @@
-# The Loom Programming Language
+# The Loom Programming Language!
 
 Welcome to **Loom**, a modern, concurrent, and shell-aware programming language designed for building powerful developer tools, command-line utilities, and rapid prototyping. Loom blends the expressiveness of Python, the concurrency of Go, and the shell scripting capabilities of Bash into a single, cohesive language.
 
@@ -14,65 +14,80 @@ Welcome to **Loom**, a modern, concurrent, and shell-aware programming language 
 
 ### Installation
 
-Loom is built in Rust. To install, ensure you have Rust and Cargo installed, then clone this repository and build:
+
+If you wish to quickly install via cURL, you can do so:
+
+```bash
+curl -s https://virex.lol/loom/install.sh | bash
+```
+
+Loom is built in Rust. To install, make sure you have Rust and Cargo installed, then clone this repository and build:
 
 ```bash
 git clone https://github.com/virex/loom-programming-language.git
 cd loom-programming-language
-cargo build --release
+./build_and_install.sh
 ```
 
-The binary will be located at `target/release/loom-lang`.
+The binary will be located at `target/release/loom-lang`, and `$HOME/.local/bin` if using the installer.
 
 ### Usage
 
 **Running a script:**
 
+Not in path:
+
 ```bash
-cargo run -- run program.lm
+cargo run -- program.lm
 ```
 
+Installed:
+
+````bash
+loom program.lm
+````
+
 **Compiling to a binary:**
+
+Not in path:
 
 ```bash
 cargo run -- weave program.lm -o binary
 ./binary
 ```
 
+Installed:
+
+```bash
+loom weave program.lm -o binary
+./binary
+```
+
 ## Quick Example
 
 ```loom
-// A simple Loom script
+// A simple Loom shell focused program
 
 act main() {
-    print("Starting Loom...")
-    
-    let name = "Developer"
-    let greeting = "Hello, " + name
-    print(greeting)
-    
-    // Spawn a concurrent task
-    let task = spawn {
-        let i = 0
-        while i < 3 {
-            print("Task working: " + i)
-            i = i + 1
-        }
-        "Done!"
-    }
-    
-    // Execute a shell command
-    let res = $ "echo 'Shell integration active'"
-    if res.status == 0 {
-        print("Shell: " + res.stdout)
-    }
+    print("testing basic shell...")
+    let res = $ "echo hello world"
+    print("stdout: " + res.stdout)
+    print("status: " + res.status)
 
-    // Await the task
-    let result = task.await()
-    when result {
-        Ok(msg) => print("Task result: " + msg),
-        Err(e)  => print("Task failed: " + e),
-    }
+    print("testing interpolation...")
+    let name = "loom"
+    let cmd = "echo hello {name}"
+    let res2 = $ cmd
+    print("stdout: " + res2.stdout)
+
+    print("testing stderr and error status...")
+    let res3 = $ "ls non_existent_file_12345"
+    print("status: " + res3.status)
+    print("stderr: " + res3.stderr)
+
+    print("testing complex expression...")
+    let res4 = $ ("echo " + "joined " + "string")
+    print("stdout: " + res4.stdout)
 }
 
 main()
