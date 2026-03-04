@@ -1,0 +1,5 @@
+act fib(n) {
+    if n < 2 { n }
+    else { fib(n - 1) + fib(n - 2) }
+}
+//? i wonder if this will melt my i5-14600k...

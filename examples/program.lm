@@ -1,0 +1,58 @@
+
+  //; loom demo | mit license
+  //* task runner
+  //. author: virex | loom v0.1
+
+  pull std::io
+
+  frame Task {
+      id: int,
+      label: str,
+      done: bool,
+  }
+
+  bind Task {
+      act complete(self) -> _ {
+          self.done = true
+      }
+
+      act display(self) -> str {
+          let status = if self.done { "done" } else { "pending" }
+          "{self.label} [{status}]"
+      }
+  }
+
+  act run_tasks(tasks: List<Task>) -> Result<int> {
+      let handles = tasks.map(act(t: Task) -> Task<_> {
+          spawn { t.complete() }
+      })
+
+      for h in handles {
+          when h.await() {
+              Ok(_)  => {},
+              Err(e) => return Err(e),
+          }
+      }
+
+      Ok(tasks.len())
+  }
+
+  act main() -> _ {
+      let tasks = [
+          Task { id: 1, label: "parse input", done: false },
+          Task { id: 2, label: "run eval",    done: false },
+          Task { id: 3, label: "emit output", done: false },
+      ]
+
+      when run_tasks(tasks) {
+          Ok(n)  => {
+              print("completed {n} tasks")
+              for t in tasks {
+                  print(t.display())
+              }
+          },
+          Err(e) => print("failed: {e}"),
+      }
+  }
+
+main()

@@ -1,0 +1,16 @@
+//; health check | mit license
+//* diagnostic logic
+
+act main() {
+    //? should we add a timeout to this task?
+    let handle = spawn { $ "grep -c 'ERROR' app.log" } //! potential heavy I/O
+    
+    print("Checking logs in the background...")
+    //? why am i still making examples
+    when handle.await() {
+        Ok(res) => print("Found {res.stdout} errors."),
+        Err(e)  => print("Log check failed: {e}"),
+    }
+}
+
+main()

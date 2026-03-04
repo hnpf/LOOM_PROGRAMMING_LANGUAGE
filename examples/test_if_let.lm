@@ -1,0 +1,9 @@
+act main() {
+    let res = Ok(10)
+    if let Ok(val) = res {
+        print(val)
+    }
+}
+main()
+
+// cat

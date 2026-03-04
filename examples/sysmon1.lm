@@ -1,0 +1,14 @@
+act main() {
+    print("Starting System Monitor...")
+    
+    // Spawn background tasks
+    let t1 = spawn { check_disk() }
+    let t2 = spawn { check_process("bash") }
+    
+    // Wait for results
+    let result1 = t1.await()
+    let result2 = t2.await()
+    
+    // Process results...
+}
+// obviously dont use this

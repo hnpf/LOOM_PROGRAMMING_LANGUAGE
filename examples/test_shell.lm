@@ -1,0 +1,24 @@
+
+act main() {
+    print("testing basic shell...")
+    let res = $ "echo hello world"
+    print("stdout: " + res.stdout)
+    print("status: " + res.status)
+
+    print("testing interpolation...")
+    let name = "loom"
+    let cmd = "echo hello {name}"
+    let res2 = $ cmd
+    print("stdout: " + res2.stdout)
+
+    print("testing stderr and error status...")
+    let res3 = $ "ls non_existent_file_12345"
+    print("status: " + res3.status)
+    print("stderr: " + res3.stderr)
+
+    print("testing complex expression...")
+    let res4 = $ ("echo " + "joined " + "string")
+    print("stdout: " + res4.stdout)
+}
+
+main()

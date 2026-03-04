@@ -1,0 +1,19 @@
+act main() {
+    let start = time_ms()
+    print("Running FizzBuzz from 1 to 100...")
+    for i in 1..101 {
+        if i % 15 == 0 {
+            print("FizzBuzz")
+        } else if i % 3 == 0 {
+            print("Fizz")
+        } else if i % 5 == 0 {
+            print("Buzz")
+        } else {
+            print(i)
+        }
+    }
+    let end = time_ms()
+    print("Completed in " + (end - start) + "ms")
+}
+
+main()

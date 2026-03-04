@@ -1,0 +1,57 @@
+frame CheckResult {
+    name: str,
+    passed: bool,
+    details: str,
+}
+
+act display_result(res: CheckResult) {
+    let status = if res.passed { "[PASS]" } else { "[FAIL]" }
+    print(status + " " + res.name + ": " + res.details)
+}
+
+act check_disk() -> CheckResult {
+    let res = $ "df -h / | tail -n 1 | awk '{print $5}' | tr -d '%'"
+    
+    if res.status != 0 {
+        return CheckResult { name: "Disk Usage", passed: false, details: "Command failed: " + res.stderr }
+    }
+    
+    CheckResult { name: "Disk Usage", passed: true, details: res.stdout + "% used" }
+}
+
+act check_process(proc_name: str) -> CheckResult {
+    let res = $ "pgrep -x " + proc_name + " | head -n 1"
+    if res.status == 0 {
+        if res.stdout != "" {
+            return CheckResult { name: "Process Check (" + proc_name + ")", passed: true, details: "Running (PID: " + res.stdout + ")" }
+        }
+    }
+    
+    CheckResult { name: "Process Check (" + proc_name + ")", passed: false, details: "Not found" }
+}
+
+act show(res) {
+    when res {
+        Ok(check) => display_result(check),
+        Err(e) => print("Check failed: " + e),
+    }
+}
+
+act main() {
+    print("Starting System Monitor...")
+    
+    // Spawn tasks
+    let t1 = spawn { check_disk() }
+    let t2 = spawn { check_process("bash") }
+    let t3 = spawn { check_process("nonexistent_process_123") } // if it works, don't touch it   
+    let r1 = t1.await()
+    let r2 = t2.await()
+    let r3 = t3.await()
+    
+    print("--- report ---")
+    show(r1)
+    show(r2)
+    show(r3)
+}
+
+main()

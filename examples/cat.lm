@@ -1,0 +1,11 @@
+if args.len() == 0 {
+	print("usage: loom cat.lm <filename>")
+} else {
+	for filename in args {
+		when read(filename) {
+			Ok(content) => print(content),
+			Err(e) => print("cat: " + filename + ": " + e)
+		}
+	}
+}
+

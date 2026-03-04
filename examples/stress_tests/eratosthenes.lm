@@ -1,0 +1,44 @@
+act main() {
+    let start = time_ms()
+    let limit = 1000000
+    print("Initializing sieve for " + limit + " numbers...")
+    
+    let is_prime = []
+    let i = 0
+    while i < limit + 1 {
+        is_prime.push(true)
+        i = i + 1
+    }
+    
+    is_prime[0] = false
+    is_prime[1] = false
+    
+    print("Starting sieve...")
+    let p = 2
+    while p * p < limit + 1 {
+        if is_prime[p] {
+            let j = p * p
+            while j < limit + 1 {
+                is_prime[j] = false
+                j = j + p
+            }
+        }
+        p = p + 1
+    }
+    
+    print("Counting primes...")
+    let count = 0
+    let k = 2
+    while k < limit + 1 {
+        if is_prime[k] {
+            count = count + 1
+        }
+        k = k + 1
+    }
+    
+    let end = time_ms()
+    print("Found " + count + " primes up to " + limit)
+    print("Completed in " + (end - start) + "ms")
+}
+
+main()

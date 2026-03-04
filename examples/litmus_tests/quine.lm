@@ -1,0 +1,11 @@
+let start = time_ms()
+let q = chr(34)
+let s = "let start = time_ms()
+let q = chr(34)
+let s = @
+print(s.replace(chr(64), q + s + q))
+let end = time_ms()
+print(chr(47) + chr(47) + " Completed in " + (end - start) + "ms")"
+print(s.replace(chr(64), q + s + q))
+let end = time_ms()
+print("// Completed in " + (end - start) + "ms")

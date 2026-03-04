@@ -1,0 +1,17 @@
+act main() {
+    let start = time_ms()
+    let i = 0
+    let n = 100000
+    let s = ""
+    print("Concatenating " + n + " times...")
+    while i < n {
+        s = s + "a"
+        i = i + 1
+    }
+    let end = time_ms()
+    print("String length: " + s.len())
+    print("Done!")
+    print("Completed in " + (end - start) + "ms")
+}
+
+main()

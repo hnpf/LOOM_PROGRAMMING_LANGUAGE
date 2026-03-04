@@ -1,0 +1,15 @@
+act main() {
+    let start = time_ms()
+    let i = 0
+    let n = 10000
+    print("Executing " + n + " shell commands...")
+    while i < n {
+        let res = $ "echo test"
+        i = i + 1
+    }
+    let end = time_ms()
+    print("Done!")
+    print("Completed in " + (end - start) + "ms")
+}
+
+main()

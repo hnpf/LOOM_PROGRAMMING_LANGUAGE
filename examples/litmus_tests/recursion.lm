@@ -1,0 +1,23 @@
+act fact(n) {
+    if n == 0 {
+        1
+    } else {
+        n * fact(n - 1)
+    }
+}
+
+act main() {
+    let start = time_ms()
+    let result = fact(5)
+    let end = time_ms()
+    
+    print("fact(5) = " + result)
+    if result == 120 {
+        print("Recursion test passed!")
+    } else {
+        print("Recursion test failed!")
+    }
+    print("Completed in " + (end - start) + "ms")
+}
+
+main()

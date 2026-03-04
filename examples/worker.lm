@@ -1,0 +1,11 @@
+act main() {
+    let log_file = "app.log"
+    
+    // link Loom to standard Linux tools
+    let err_count = $ "grep 'ERROR' {log_file} | wc -l"
+    let warn_count = $ "grep 'WARN' {log_file} | wc -l"
+    
+    print("Log sum for {log_file}:")
+    print("errs: {err_count.stdout}")
+    print("warns: {warn_count.stdout}")
+}

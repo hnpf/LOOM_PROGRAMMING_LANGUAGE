@@ -1,0 +1,4 @@
+act main() {
+    print("Calling main...")
+}
+// i forgot why i needed this

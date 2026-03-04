@@ -1,0 +1,26 @@
+const PI = 3.14159
+
+print(PI)
+
+let x = 5 // ngl can be anything else just using 5
+// now y
+let y = 42
+print("testing conditionals..")
+if x > 10 { print("Large") } else { print("Small") }
+if y > 10 { print("Large") } else { print("Small") }
+// of course it works
+
+let res = $ "echo 'created' > /tmp/config.json && echo 'done'"
+let ores = $ "echo hi >> /tmp/config.json"
+
+if let Ok(data) = read("/tmp/config.json") {
+    print("Read {data.len()} bytes")
+}
+
+// or yk fuck it
+
+let dir = "/tmp"
+let strint = $ "ls -l {dir}"
+print("Res stdout: {res.stdout}")
+let config = { port: 8080, host: "localhost" }
+print("Connecting to {config.host}:{config.port}")

@@ -1,0 +1,86 @@
+// loom ssg 2 - refined
+//!!! n-nya! let's build a wiki.. >///<
+
+let template = "
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='UTF-8'>
+    <style>
+        :root { --bg: #f6f5f4; --surface: #ffffff; --primary: #3584e4; --text: #2e3436; }
+        body { font-family: sans-serif; background: var(--bg); color: var(--text); display: flex; margin: 0; min-height: 100vh; }
+        nav { width: 250px; background: #ebebeb; padding: 2rem; border-right: 1px solid #dcdcdc; }
+        nav a { display: block; padding: 10px; color: var(--text); text-decoration: none; border-radius: 8px; margin-bottom: 5px; }
+        nav a:hover { background: #d0d0d0; }
+        main { flex: 1; padding: 3rem; max-width: 900px; }
+        .card { background: var(--surface); padding: 2rem; border-radius: 16px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        pre { background: #2e3436; color: #f6f5f4; padding: 1rem; border-radius: 12px; overflow-x: auto; }
+        code { font-family: monospace; color: var(--primary); }
+        h1 { color: var(--primary); font-size: 2.5rem; }
+        h2 { border-bottom: 2px solid var(--bg); padding-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <nav>{{nav}}</nav>
+    <main><div class='card'>{{content}}</div></main>
+</body>
+</html>"
+
+act parse_md(md) {
+    let lines = md.split("\n")
+    let html = ""
+    let in_code = false
+
+    for line in lines {
+        if line.starts_with("```") {
+            if in_code {
+                html = html + "</code></pre>\n"
+                in_code = false
+            } else {
+                html = html + "<pre><code>\n"
+                in_code = true
+            }
+        } else if in_code {
+            // leave the code entirely alone!!
+            html = html + line + "\n"
+        } else if line.starts_with("# ") {
+            html = html + "<h1>" + line.replace("# ", "") + "</h1>\n"
+        } else if line.starts_with("## ") {
+            html = html + "<h2>" + line.replace("## ", "") + "</h2>\n"
+        } else {
+            // normal text (kinda hacky but safe-ish)
+            let text = line.replace("**", "<b>") 
+            html = html + text + "<br>\n"
+        }
+    }
+    
+    html
+}
+
+act generate() {
+    let files = ls("docs")
+    let nav_html = "<h3>Loom Docs</h3>"
+    
+    for f in files {
+        if f.ends_with(".md") {
+            let name = f.replace(".md", "")
+            nav_html = nav_html + "<a href='" + name + ".html'>" + name + "</a>"
+        }
+    }
+
+    for file in files {
+        if file.ends_with(".md") {
+            when read("docs/" + file) {
+                Ok(content) => {
+                    let body = parse_md(content)
+                    let page = template.replace("{{nav}}", nav_html).replace("{{content}}", body)
+                    write("docs/" + file.replace(".md", ".html"), page)
+                    print("Synthesized: " + file)
+                }
+            }
+        }
+    }
+}
+
+generate()
+print("woohoo! conversion is finished!! :3")

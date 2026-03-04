@@ -1,0 +1,33 @@
+//! >_<
+
+act scan_port(ip, port) {
+    let res = net.connect(ip, port)
+    if res.is_ok() {
+        print("[+] Port " + str(port) + " is OPEN")
+    }
+}
+
+act main() {
+    if args.len() < 3 {
+        print("usage: scan <ip> <start> <end>")
+        return _
+    }
+
+    let target = args[0]
+    let start = int(args[1])
+    let end = int(args[2])
+  
+    print("--- Scanning " + target + " ---")
+    let tasks = []
+    for p in start..end {
+        tasks.push(spawn scan_port(target, p))
+    }
+
+    for t in tasks {
+        t.await()
+    }
+    
+    print("finished!")
+}
+
+main()

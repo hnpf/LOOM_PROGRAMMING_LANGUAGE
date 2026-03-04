@@ -1,0 +1,13 @@
+act main() {
+	let count = 0
+	loop {
+		print("Loop iteration: " + str(count))
+		count = count + 1
+		if count > 5 {
+			print("Reached limit, breaking...")
+			break
+		}
+		sleep(1000)
+	}
+}
+main()

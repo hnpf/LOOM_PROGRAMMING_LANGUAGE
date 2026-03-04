@@ -1,0 +1,11 @@
+for i in [1, 2, 3, 4, 5] {
+	let junk = ""
+	for i in 0..100 {
+		junk = junk + "A"
+	}
+	// cooking with gas
+	let res = $ "echo '" + junk + "' | ./target_binary" // idk ngl
+	if res.status != 0 {
+		print("CRASH at iteration " + i)
+	}
+}

@@ -1,0 +1,22 @@
+trait Drawable {
+    act draw(self) -> str
+}
+
+frame Player {
+    name: str,
+    x: int,
+    y: int
+}
+
+weave Drawable into Player {
+    act draw(self) -> str {
+        "player {self.name} at {self.x}, {self.y}"
+    }
+}
+
+act main() {
+    let p = Player { name: "virex", x: 10, y: 20 }
+    print(p.draw())
+}
+
+main()

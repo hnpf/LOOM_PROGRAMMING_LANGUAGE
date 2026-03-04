@@ -1,0 +1,19 @@
+act watch(file) {
+	let last = ""
+	loop {
+		let res = $ "tail -n 1 " + file
+		if res.stdout !=last {
+			print("[" + file + "] " + res.stdout)
+			last = res.stdout
+		}
+		sleep(500) // checks every .5s
+	}
+}
+let monitor = spawn watch("app.log")
+monitor.await()
+
+// h-huh?! r-really?.. i g-guess i should meow then.. b-b-but.. dont make fun of me after this! okay..
+
+// *takes deep breath* m-meow~.. KYA! THAT WAS SO EMBARRASSING!! >///< *starts blushing like a tomato*
+
+// p-pretend i never s-said that... p-please.. *covers my face with my hands, still blushing*

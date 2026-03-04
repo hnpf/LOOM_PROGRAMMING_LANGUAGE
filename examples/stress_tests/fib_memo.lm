@@ -1,0 +1,28 @@
+// Global cache for memoization
+let cache = vec(101, -1)
+
+act fib(n) {
+    if n < 2 {
+        return n
+    }
+    
+    if cache[n] != -1 {
+        return cache[n]
+    }
+    
+    let res = fib(n - 1) + fib(n - 2)
+    cache[n] = res
+    res
+}
+
+act main() {
+    let start = time_ms()
+    let n = 35
+    print("Calculating memoized fib(" + n + ")...")
+    let result = fib(n)
+    let end = time_ms()
+    print("fib(" + n + ") = " + result)
+    print("Completed in " + (end - start) + "ms")
+}
+
+main()

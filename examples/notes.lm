@@ -1,0 +1,14 @@
+act encrypt(text, key) {
+	let secret = ""
+	for c in text.split() {
+		secret = secret + chr(xor(ord(c), key))
+	}
+	secret
+}
+
+let key = 42
+let msg = "Loom is powerful!"
+write("secret.enc", encrypt(msg, key))
+print("Decrypted: " + encrypt(read("secret.enc").Ok, key))
+
+// do i even need to say it

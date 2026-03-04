@@ -1,0 +1,19 @@
+act fib(n) {
+    if n < 2 {
+        n
+    } else {
+        fib(n - 1) + fib(n - 2)
+    }
+}
+
+act main() {
+    let start = time_ms()
+    let n = 35
+    print("Calculating fib(" + n + ")...")
+    let result = fib(n)
+    let end = time_ms()
+    print("fib(" + n + ") = " + result)
+    print("Completed in " + (end - start) + "ms")
+}
+
+main()

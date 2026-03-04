@@ -1,0 +1,20 @@
+act check_service(name) {
+    let res = $ "systemctl is-active {name}" // god i love $ so much im such a genius
+    return res.stdout == "active"
+}
+
+act main() {
+    let services = ["firefox", "gdm", "docker"] // most i can think of rn
+    let results = services.map(act(s) {
+        spawn { check_service(s) }
+    })
+
+    for r in results {
+        when r.await() {
+            Ok(active) => print("Service active: {active}"),
+            _          => print("Failed check"),
+        }
+    }
+}
+
+main()

@@ -1,0 +1,22 @@
+//; loom project | licensed under mit
+//; copyright (c) 2026 virex (hnpf)
+
+//* user authentication
+//. author: virex | version: 1 | date: march 2026
+
+act login(user: str, pass: str) -> Result<bool> {
+    //? should we validate format before hashing?
+    let hash = hash_password(pass) //! never log this value
+    let auth_task = spawn { check_db(user, hash) }
+    return auth_task.await()
+}
+
+//* data procs
+//. status: is experimental
+
+act process(data: List<int>) {
+    //! high memory usage is expected
+    for item in data {
+        print(item)
+    }
+}

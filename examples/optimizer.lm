@@ -1,0 +1,76 @@
+// A small Unix Optimizer written in LOOM
+// Monitors system health and performs "cleanup" tasks.
+
+act get_mem_usage() {
+    let res = $ "free | grep Mem | awk '{print $3/$2 * 100.0}'"
+    return float(res.stdout)
+}
+
+act get_disk_usage() {
+    let res = $ "df / | tail -1 | awk '{print $5}' | sed 's/%//'"
+    return int(res.stdout)
+}
+
+act optimize() {
+    print("[!] Optimization triggered...")
+    
+    // Clean /tmp directory (files older than 1 day)
+    print("[-] Cleaning temporary files...")
+    let res1 = $ "find /tmp -type f -atime +1 -delete 2>/dev/null"
+    
+    // Clear user thumbnail cache
+    print("[-] Clearing thumbnail cache...")
+    let res2 = $ "rm -rf ~/.cache/thumbnails/*"
+    
+    print("[+] Optimization complete.")
+}
+
+act main() {
+    print("=== LOOM Unix Optimizer ===")
+    
+    let mode = input("Choose mode (auto/manual): ")
+    
+    if mode == "auto" {
+        print("Monitoring system health every 2 seconds...")
+        loop {
+            let mem = get_mem_usage()
+            let disk = get_disk_usage()
+            
+            print("Status -> RAM: " + str(mem) + "% | DISK: " + str(disk) + "%")
+            
+            if mem > 80.0 {
+                print("[CRITICAL] High RAM usage detected!")
+                optimize()
+            }
+            
+            if disk > 90 {
+                print("[CRITICAL] Disk space running low!")
+                optimize()
+            }
+            sleep(2000)
+        }
+    } else if mode == "manual" {
+        print("Manual Mode Active.")
+        loop {
+            print("
+1. Check Stats")
+            print("2. Run Optimization")
+            print("3. Exit")
+            let choice = input("Choice: ")
+            
+            if choice == "1" {
+                let mem = get_mem_usage()
+                let disk = get_disk_usage()
+                print("RAM: " + str(mem) + "% | DISK: " + str(disk) + "%")
+            } else if choice == "2" {
+                optimize()
+            } else if choice == "3" {
+                break
+            }
+        }
+    } else {
+        print("Invalid mode. Exiting.")
+    }
+}
+
+main()

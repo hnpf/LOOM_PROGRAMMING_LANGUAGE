@@ -1,0 +1,6 @@
+act main() {
+    print("Hello, world!")
+}
+main()
+
+// or if you're weird, use "print("Hello, world!")" if you don't want a func

@@ -1,0 +1,66 @@
+act brainfuck(code) {
+    // Initialize tape (1000 cells is enough for most things)
+    let tape = []
+    let i = 0
+    while i < 1000 {
+        tape.push(0)
+        i = i + 1
+    }
+
+    let ptr = 0
+    let pc = 0
+    let chars = code.split("")
+    let n = chars.len()
+
+    while pc < n {
+        let c = chars[pc]
+        if c == "+" {
+            tape[ptr] = (tape[ptr] + 1) % 256
+        } else if c == "-" {
+            tape[ptr] = (tape[ptr] + 255) % 256
+        } else if c == ">" {
+            ptr = ptr + 1
+        } else if c == "<" {
+            ptr = ptr - 1
+        } else if c == "." {
+            print_raw(chr(tape[ptr]))
+        } else if c == "," {
+            let inp = input("")
+            if inp.len() > 0 {
+                tape[ptr] = ord(inp)
+            }
+        } else if c == "[" {
+            if tape[ptr] == 0 {
+                let depth = 1
+                while depth > 0 {
+                    pc = pc + 1
+                    if chars[pc] == "[" { depth = depth + 1 }
+                    else if chars[pc] == "]" { depth = depth - 1 }
+                }
+            }
+        } else if c == "]" {
+            if tape[ptr] != 0 {
+                let depth = 1
+                while depth > 0 {
+                    pc = pc - 1
+                    if chars[pc] == "]" { depth = depth + 1 }
+                    else if chars[pc] == "[" { depth = depth - 1 }
+                }
+            }
+        }
+        pc = pc + 1
+    }
+    print("") // final newline
+}
+
+act main() {
+    let start = time_ms()
+    // Hello World in Brainfuck
+    let code = "++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>.>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+.>++."
+    print("Running Hello World in Brainfuck:")
+    brainfuck(code)
+    let end = time_ms()
+    print("Completed in " + (end - start) + "ms")
+}
+
+main()

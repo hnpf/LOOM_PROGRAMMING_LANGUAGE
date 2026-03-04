@@ -1,0 +1,60 @@
+// Interactive Menu Test in LOOM with choose()
+
+act main() {
+    clear()
+    print("Welcome to the LOOM Interactive Menu!")
+    
+    let name = input("What is your name? ")
+    print("Hello, " + name + "!")
+    sleep(1000)
+    
+    loop {
+        clear()
+        print("--- Main Menu (User: " + name + ") ---")
+        
+        // choose() automatically prints the numbered list and handles validation
+        let selection = choose("Select an action:", [
+            "Get System Status", 
+            "Run a command", 
+            "Show Quote of the Day",
+            "Exit"
+        ])
+        
+        if selection == "Get System Status" {
+            print("
+[STATUS] System is looking good!")
+            input("
+Press Enter to return to menu...")
+        } else if selection == "Run a command" {
+            let cmd = input("Enter shell command: ")
+            print("Executing: " + cmd + "...")
+            let res = $ cmd
+            print("
+Output:
+" + res.stdout)
+            if res.stderr != "" {
+                print("Error:
+" + res.stderr)
+            }
+            input("
+Press Enter to return to menu...")
+        } else if selection == "Show Quote of the Day" {
+             let quotes = [
+                 "The only way to do great work is to love what you do.",
+                 "Code is like humor. When you have to explain it, it’s bad.",
+                 "Simplicity is the soul of efficiency.",
+                 "Loom: Weaving code into reality."
+             ]
+             let q = choose("Pick a quote:", quotes)
+             print("
+>>> " + q + " <<<")
+             input("
+Press Enter...")
+        } else if selection == "Exit" {
+            print("Goodbye, " + name + "!")
+            break
+        }
+    }
+}
+
+main()
